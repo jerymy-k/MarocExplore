@@ -1,0 +1,370 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "MarocExplore API",
+        "description": "API pour la plateforme MarocExplore",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Serveur local"
+        }
+    ],
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Créer un compte",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Compte créé avec succès"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Se connecter",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connecté avec succès"
+                    },
+                    "401": {
+                        "description": "Email ou mot de passe incorrect"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Se déconnecter",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "Déconnecté avec succès"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/me": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Voir son profil",
+                "operationId": "9d9bc556f927575aa492a88c28fe5908",
+                "responses": {
+                    "200": {
+                        "description": "Profil de l'utilisateur"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/itineraires/{id}/favori": {
+            "post": {
+                "tags": [
+                    "Itinéraires"
+                ],
+                "summary": "Ajouter ou retirer des favoris",
+                "operationId": "4ffce4603a788a434e21dd93a15d46e6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ajouté ou retiré des favoris"
+                    },
+                    "404": {
+                        "description": "Itinéraire non trouvé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/itineraires": {
+            "get": {
+                "tags": [
+                    "Itinéraires"
+                ],
+                "summary": "Voir tous les itinéraires",
+                "operationId": "7adafda5d0caea1a7a819bea795919f4",
+                "responses": {
+                    "200": {
+                        "description": "Liste des itinéraires"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Itinéraires"
+                ],
+                "summary": "Créer un itinéraire",
+                "operationId": "7ad016182d47519d4c8ffa8486f91b69",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "titre",
+                                    "categorie",
+                                    "duree",
+                                    "image",
+                                    "destinations"
+                                ],
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "categorie": {
+                                        "type": "string"
+                                    },
+                                    "duree": {
+                                        "type": "integer"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Itinéraire créé avec succès"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/itineraires/{id}": {
+            "get": {
+                "tags": [
+                    "Itinéraires"
+                ],
+                "summary": "Voir un itinéraire",
+                "operationId": "04f60161c4692ad78027a58b64f8728b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Itinéraire trouvé"
+                    },
+                    "404": {
+                        "description": "Itin éraire non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Itinéraires"
+                ],
+                "summary": "Modifier un itinéraire",
+                "operationId": "d1bdcc3d336b30713a6d136dafbeb986",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "categorie": {
+                                        "type": "string"
+                                    },
+                                    "duree": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Itinéraire modifié avec succès"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    },
+                    "404": {
+                        "description": "Itinéraire non trouvé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Itinéraires"
+                ],
+                "summary": "Supprimer un itinéraire",
+                "operationId": "067cf7e2251cb6a1f121ee3b2b23a7cf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Itinéraire supprimé avec succès"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    },
+                    "404": {
+                        "description": "Itinéraire non trouvé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "Itinéraires",
+            "description": "Itinéraires"
+        }
+    ]
+}
